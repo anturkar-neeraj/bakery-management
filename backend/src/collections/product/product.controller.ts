@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post, UseGuards, Request } from "@nestjs/common";
+import { Body, Controller, Get, Post, UseGuards, Request, Put, Param } from "@nestjs/common";
 import { ProductService } from './product.service';
-import { CreateProductRequest, CreateProductTypeRequest } from './product.interface';
+import { ProductRequest, ProductTypeRequest } from './product.interface';
 import { JwtAuthGuard } from "../user/auth/jwt-auth.guard";
 
 
@@ -10,14 +10,26 @@ export class ProductController {
 
     @UseGuards(JwtAuthGuard)
     @Post('productType')
-    createProductType(@Body() productType: CreateProductTypeRequest, @Request() req: any) {
-        return this.productService.createProductType(productType, req.user);
+    createProductType(@Body() productType: ProductTypeRequest, @Request() request: any) {
+        return this.productService.createProductType(productType, request.user);
     }
 
     @UseGuards(JwtAuthGuard)
     @Post('product')
-    createProduct(@Body() product: CreateProductRequest, @Request() req: any) {
-        return this.productService.createProduct(product, req.user);
+    createProduct(@Body() product: ProductRequest, @Request() request: any) {
+        return this.productService.createProduct(product, request.user);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Put('productType/:id')
+    updateProductType(@Param('id') id: number, @Body() productType: ProductTypeRequest, @Request() request: any) {
+        return this.productService.updateProductType(id, productType, request.user);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Put('product/:id')
+    updateProduct(@Param('id') id: number, @Body() product: ProductRequest, @Request() request: any) {
+        return this.productService.updateProduct(id, product, request.user);
     }
 
 }

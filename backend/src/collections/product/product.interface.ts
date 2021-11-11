@@ -1,9 +1,9 @@
-export interface CreateProductTypeRequest {
+export interface ProductTypeRequest {
     name: string;
     description: string;
 }
 
-export interface CreateProductRequest {
+export interface ProductRequest {
     name: string
     description: string;
     pricePerUnit: number;

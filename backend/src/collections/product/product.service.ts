@@ -61,7 +61,7 @@ export class ProductService {
             };
             const updatedProduct = await this.productRepository.update({ id: id }, productToUpdate);
             if (updatedProduct?.affected === 1) {
-                return this.productRepository.findOne(id);
+                return this.productRepository.findOne({ where: { id: id }, relations: ["productType"] });
             } else {
                 return { message: "No product was updated! " };
             }
@@ -70,15 +70,18 @@ export class ProductService {
         }
     }
 
-    async getAllProducts(query: any): Promise<Product[]> {
+    async getAllProducts(query: any): Promise<any> {
         try {
             if (Object.keys(query).length) {
                 const name: string = Object.values(query)[0].toString();
                 return await this.productRepository.find({
-                    name: Like(`%${Buffer.from(name, 'base64').toString('ascii')}%`)
+                    where: { name: Like(`%${Buffer.from(name, 'base64').toString('ascii')}%`) },
+                    relations: ["productType"]
                 });
             }
-            return await this.productRepository.find();
+            return await this.productRepository.find({
+                relations: ["productType"]
+            });
         } catch (e) {
             throw new InternalServerErrorException(e.toString());
         }

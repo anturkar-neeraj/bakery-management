@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { CreateUserRequest, LoginUserRequest } from './user.model';
+import { CreateUserRequest, LoginUserRequest } from './user.interface';
 import { JwtService } from '@nestjs/jwt';
 const bcrypt = require('bcrypt');
 
@@ -14,10 +14,11 @@ export class UserService {
     ) { }
 
 
-    createUser(user: CreateUserRequest): Promise<User> {
+    async createUser(user: CreateUserRequest): Promise<any> {
         user.password = bcrypt.hashSync(user.password, 10);
         const newUser = this.usersRepository.create(user);
-        return this.usersRepository.save(newUser);
+        const { password, ...savedUser } = await this.usersRepository.save(newUser);
+        return savedUser;
     }
 
     async validatateUser(creds: LoginUserRequest): Promise<any> {

@@ -5,6 +5,8 @@ export interface CreateUserRequest {
     email: string;
     password: string;
     type: string;
+    isPasswordInitial: boolean;
+    forcePasswordChange: boolean;
 }
 
 export interface LoginUserRequest {

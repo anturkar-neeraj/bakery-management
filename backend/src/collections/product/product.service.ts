@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product, ProductType } from './product.entity';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { ProductTypeRequest, ProductRequest } from './product.interface';
 
 
@@ -65,6 +65,36 @@ export class ProductService {
             } else {
                 return { message: "No product was updated! " };
             }
+        } catch (e) {
+            throw new InternalServerErrorException(e.toString());
+        }
+    }
+
+    async getAllProducts(query: any): Promise<Product[]> {
+        try {
+            if (Object.keys(query).length) {
+                const name: string = Object.values(query)[0].toString();
+                return await this.productRepository.find({
+                    name: Like(`%${Buffer.from(name, 'base64').toString('ascii')}%`)
+                });
+            }
+            return await this.productRepository.find();
+        } catch (e) {
+            throw new InternalServerErrorException(e.toString());
+        }
+    }
+
+    async getProductById(id: string): Promise<Product> {
+        try {
+            return await this.productRepository.findOne(id);
+        } catch (e) {
+            throw new InternalServerErrorException(e.toString());
+        }
+    }
+
+    async getProductTypes(): Promise<ProductType[]> {
+        try {
+            return await this.productTypeRepository.find()
         } catch (e) {
             throw new InternalServerErrorException(e.toString());
         }

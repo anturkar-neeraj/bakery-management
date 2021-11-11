@@ -5,8 +5,9 @@ import { AppService } from './app.service';
 import { mySqlConfig } from './config/app.config'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './collections/user/user.module';
+import { ProductModule } from './collections/product/product.module';
 @Module({
-  imports: [TypeOrmModule.forRoot(mySqlConfig), UserModule],
+  imports: [TypeOrmModule.forRoot(mySqlConfig), UserModule, ProductModule],
   controllers: [AppController],
   providers: [AppService],
 })

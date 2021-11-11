@@ -13,6 +13,6 @@ export const mySqlConfig: MysqlConnectionOptions = {
 
 export const jwtConfig: any = {
     secret: 'SECRET',
-    signOptions: { expiresIn: '60s' }
+    signOptions: { expiresIn: '60m' }
 }
 

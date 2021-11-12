@@ -1,8 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { CreateUserRequest, LoginUserRequest } from './user.interface';
+import { CreateUserRequest, LoginUserRequest, StandardResponse } from './user.interface';
 import { JwtService } from '@nestjs/jwt';
 const bcrypt = require('bcrypt');
 
@@ -14,11 +14,22 @@ export class UserService {
     ) { }
 
 
-    async createUser(user: CreateUserRequest): Promise<any> {
-        user.password = bcrypt.hashSync(user.password, 10);
-        const newUser = this.usersRepository.create(user);
-        const { password, ...savedUser } = await this.usersRepository.save(newUser);
-        return savedUser;
+    async createUser(user: CreateUserRequest): Promise<StandardResponse> {
+        try {
+
+            let createuserResponse: StandardResponse;
+            user.password = bcrypt.hashSync(user.password, 10);
+            const newUser = this.usersRepository.create(user);
+            const { password, ...savedUser } = await this.usersRepository.save(newUser);
+            createuserResponse = {
+                success: true,
+                data: savedUser,
+                message: "User created successfully."
+            }
+            return createuserResponse;
+        } catch (e) {
+            throw new InternalServerErrorException(e.toString());
+        }
     }
 
     async validatateUser(creds: LoginUserRequest): Promise<any> {
@@ -44,11 +55,16 @@ export class UserService {
         try {
             const userData = await this.validatateUser(creds);
             const accessToken = await this.jwtService.signAsync(userData);
-            return {
-                access_token: accessToken
-            }
+
+            let loginResponse: StandardResponse = {
+                success: true,
+                data: { userData, accessToken },
+                message: "Login Successfull."
+            };
+
+            return loginResponse;
         } catch (e) {
-            throw new UnauthorizedException('Invalid email or password');
+            throw new UnauthorizedException(e.toString());
         }
     }
 }

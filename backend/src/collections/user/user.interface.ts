@@ -21,3 +21,9 @@ export interface LoginUserResponse {
     email: string;
     type: string;
 }
+
+export interface StandardResponse {
+    success: boolean;
+    data: any;
+    message: string;
+}

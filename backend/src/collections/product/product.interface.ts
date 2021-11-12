@@ -10,3 +10,9 @@ export interface ProductRequest {
     minMassOrderQuantity: number;
     productType: string;
 }
+
+export interface StandardResponse {
+    success: boolean;
+    data: any;
+    message: string;
+}

@@ -51,7 +51,7 @@ export class UserService {
 
     }
 
-    async loginUser(creds: LoginUserRequest): Promise<any> {
+    async loginUser(creds: LoginUserRequest): Promise<StandardResponse> {
         try {
             const userData = await this.validatateUser(creds);
             const accessToken = await this.jwtService.signAsync(userData);

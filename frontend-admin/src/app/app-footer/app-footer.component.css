@@ -1,0 +1,26 @@
+.footer-main{
+    background: #240f0b;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2rem ;
+}
+.fa {
+    color: white;
+    font-size: 20px;
+    width: 50px;
+    margin-top: 15px; 
+    text-align: center;
+    text-decoration: none;
+    background: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+.copyright {
+    color: white;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+
+}
